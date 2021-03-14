@@ -6,6 +6,8 @@ Chatovací aplikace využívající socket.io
 
 `` 
 npm install
+
 npm run app
 `` 
+
 [localhost:5000](http://localhost:5000)
