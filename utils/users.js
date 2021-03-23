@@ -1,10 +1,8 @@
-const { relativeTimeRounding } = require("moment");
-
 const users = [];
 
 //Připojit uživatele do chatu
 function userJoin(id, username, room) {
-    const user = {id, username, room};
+    const user = { id, username, room };
 
     users.push(user);
 
@@ -26,7 +24,7 @@ function userLeave(id) {
 
 //Místnost uživatele
 function getRoomUsers(room) {
-    return user.filter(user => user.room === room);
+    return users.filter(user => user.room === room);
 
 }
 

@@ -1,6 +1,7 @@
 const chatForm = document.getElementById('chat-form');
 const chatMessage = document.querySelector('.chat-messages');
- 
+const roomName = document.getElementById('room-name');
+const userList = document.getElementById('user');
 //Získat jméno a room z URL
 const { username, room } = Qs.parse(location.search, {
     ignoreQueryPrefix: true
@@ -10,6 +11,12 @@ const socket = io();
 
 //Připojit se do místnosti
 socket.emit('joinRoom', {username, room});
+
+//Získat místnost a uživatele
+socket.on('roomUsers', ({ room, users}) => {
+    outputRoomName(room);
+    outputUsers(users);
+});
 
 //Zpráva ze serveru
 socket.on('message', message => {
@@ -44,3 +51,13 @@ function outputMessage(message){
     </p>`
     document.querySelector('.chat-messages').appendChild(div);
 };
+
+function outputRoomName(room) {
+    roomName.innerText = room;
+}
+
+function outputUsers(users) {
+    userList.innerHTML = `
+    ${users.map(user => `<li>${user.username}</li>`).join()}
+    `;
+}

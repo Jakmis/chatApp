@@ -27,17 +27,27 @@ io.on('connection', (socket) => {
         //Zdělení ostatním uživatelům o připojení nového uživatele
         socket.broadcast.to(user.room).emit('message', formatMessage(botName, `${user.username} se připojil do chatu`));
 
-        //Zdělení ostatním uživatelům o odpojení uživatele
-        socket.on('disconnect', () => {
-            const user = userLeave(socket.id);
-
-            if (user) {
-            io.to(user.room).emit('message', formatMessage(botName, `${user.username} se odpojil`));
-            }
-
+        io.to(user.room).emit('roomUsers', {
+            room: user.room,
+            users: getRoomUsers(user.room)
         });
-    });
 
+    });
+     //Zdělení ostatním uživatelům o odpojení uživatele
+    socket.on('disconnect', () => {
+        const user = userLeave(socket.id);
+
+        if (user) {
+        io.to(user.room).emit('message', formatMessage(botName, `${user.username} se odpojil`)
+        );
+
+            io.to(user.room).emit('roomUsers', {
+                room: user.room,
+                users: getRoomUsers(user.room)
+            });
+        }
+        
+    });
 
     
     //Získat zprávu
